@@ -1,0 +1,13 @@
+# docker image build for debian with c++ & c build tools
+# author : Linggawasistha Djohari <linggawasistha.outlook@com>
+# This image is use for building darkhttpd.
+# By create this image and available on build server or on development
+# we can cut time to build darkhttpd on every build.
+
+version: '3'
+services:
+  debian-buildtool:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: debian-buildtool:trixie-slim
