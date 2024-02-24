@@ -1,0 +1,198 @@
+syntax = "proto3";
+
+package trident;
+
+import "google/protobuf/timestamp.proto";
+import "internals/common.proto";
+
+enum IdentityType{
+    IDENTYPE_UNKNOWN = 0;
+    IDENTYPE_USERNAME = 1;
+    IDENTYPE_EMAIL = 2;
+    IDENTYPE_PHONE = 4;
+    IDENTYPE_SERVICE_SCOPED = 8;
+}
+
+enum IdentityProvider {
+    IDENPROVIDER_UNKNOWN = 0;
+    IDENPROVIDER_INTERNAL = 1;
+    IDENPROVIDER_EXT_AUTH = 2;
+    IDENPROVIDER_GOOGLE = 4;
+    IDENPROVIDER_FACEBOOK = 8;
+    IDENPROVIDER_TWITTER = 16;
+    IDENPROVIDER_GITHUB = 32;
+    IDENPROVIDER_LINKEDIN = 64;
+    IDENPROVIDER_MICROSOFT = 128;
+    IDENPROVIDER_YAHOO = 256;
+    IDENPROVIDER_APPLE = 512;
+    IDENPROVIDER_TWITCH = 1024;
+    AMAZON = 2048;
+}
+    
+enum UserStatus{
+    USER_INACTIVE = 0;
+    USER_ACTIVE = 1;
+    USER_INVITED = 2;
+    USER_UNCONFIRMED = 4;
+    USER_UNVERIFIED = 8;
+    USER_SUSPENDED = 16;
+    USER_LOCKED = 32;
+    USER_DELETED = 64;
+}
+
+
+
+message User {
+    string user_id = 1;
+    string username = 2;
+    string email = 3;
+    string password = 4;
+    IdentityType identity_type = 5;
+    IdentityProvider identity_provider = 6;
+    uint64 flags = 7;
+    UserStatus status = 8;
+    google.protobuf.Timestamp created_on = 9;
+    uint64 create_by = 10;
+    google.protobuf.Timestamp updated_on = 11;
+    uint64 updated_by = 12;
+}
+
+
+message UserProfile{
+    string user_id = 1;
+    string name = 2;
+    string first_name = 3;
+    string last_name = 4;
+    bool is_not_having_last_name = 5;
+    string department = 6;
+    string company = 7;
+    google.protobuf.Timestamp created_on = 8;
+    uint64 create_by = 9;
+    google.protobuf.Timestamp updated_on = 10;
+    uint64 updated_by = 11;
+}
+
+
+message UserExtendedInfo {
+    string user_extended_info_id = 1;
+    string user_id = 2;
+    string key = 3;
+    string caption = 4;
+    string value = 5;
+    int32 type = 6;
+    google.protobuf.Timestamp created_on = 7;
+    uint64 create_by = 8;
+    google.protobuf.Timestamp updated_on = 9;
+    uint64 updated_by = 10;
+}
+
+enum UserServiceWriteAction{
+    USER_SERVICE_ACTION_UNKNOWN = 0;
+    USER_SERVICE_ACTION_CREATE = 1;
+    USER_SERVICE_ACTION_UPDATE = 2;
+    USER_SERVICE_ACTION_DELETE = 3;
+    USER_SERVICE_ACTION_STATUS = 4;
+}
+
+enum UserServiceModule{
+    USER_SERVICE_MODULE_UNKNOWN = 0;
+    USER_SERVICE_MODULE_USER = 1;
+    USER_SERVICE_MODULE_USER_PROFILE = 2;
+    USER_SERVICE_MODULE_USER_EXTENDED_INFO = 4;
+    USER_SERVICE_MODULE_USER_AVATAR = 8;
+    USER_SERVICE_MODULE_GROUP = 16;
+}
+
+
+enum UserServiceQueryFlags{
+    USER_SERVICE_QUERY_FLAG_UNKNOWN = 0;
+    USER_SERVICE_QUERY_FLAG_USER_ID = 1;
+    USER_SERVICE_QUERY_FLAG_USERNAME = 2;
+    USER_SERVICE_QUERY_FLAG_EMAIL = 4;
+    USER_SERVICE_QUERY_FLAG_PHONE_NUMBER = 8;
+    USER_SERVICE_QUERY_FLAG_SERVICE_SCOPED_ID = 16;
+    USER_SERVICE_QUERY_FLAG_NAME = 32;
+    USER_SERVICE_QUERY_FLAG_FIRST_NAME = 64;
+    USER_SERVICE_QUERY_FLAG_LAST_NAME = 128;
+    USER_SERVICE_QUERY_FLAG_STATUS = 256;
+    USER_SERVICE_QUERY_FLAG_IDENTITY_PROVIDER = 512;
+    USER_SERVICE_QUERY_FLAG_IDENTITY_TYPE = 1024;
+    USER_SERVICE_QUERY_FLAG_SEARCH_QUERY = 2048;
+
+}
+
+message UserServiceQuery{
+    uint32 flags = 1;
+    repeated string user_ids = 2;
+    repeated string usernames = 3;
+    repeated string emails = 4;
+    repeated string phone_numbers = 5;
+    repeated string service_scoped_ids = 6;
+    repeated string name = 7;
+    repeated string first_name = 8;
+    repeated string last_name = 9;
+    optional UserStatus status = 10;
+    optional IdentityProvider identity_provider = 11;
+    optional IdentityType identity_type = 12;
+}
+
+message UserServiceListRequest{
+    UserServiceModule module = 1;
+    string scope = 2;
+    string query = 3;
+    PageRequest page = 4;
+    UserServiceQuery filters = 5;
+    optional TimeSpan created_on = 6;
+    optional TimeSpan updated_on = 7;
+}
+
+message UserServiceListResponse{
+    uint32 status = 1;
+    UserServiceModule module = 2;
+    PageInfo page=3;
+    map<string, string> errors = 4;
+    repeated User data = 5;
+    repeated UserProfile user_profiles = 6;
+    repeated UserExtendedInfo user_extended_infos = 7;
+    repeated Avatar avatars = 8;
+}
+
+message UserServiceWriteRequest{
+    string scope = 1;
+    UserServiceModule module = 2;
+    UserServiceWriteAction action = 3;
+    optional User user = 4;
+    optional UserProfile user_profile = 5;
+    optional UserExtendedInfo user_extended_info = 6;
+    optional Avatar user_avatar = 7;
+}
+
+message UserServiceWriteResponse{
+    uint32 status = 1;
+    UserServiceModule module = 2;
+    UserServiceWriteAction action = 3;
+    map<string, string> errors = 4;
+}
+
+message Avatar{
+    string avatar_id = 1;
+    string user_id = 2;
+    string caption = 3;
+    string url = 4;
+    string thumbnail_url = 5;
+    uint64 flags = 6;
+    google.protobuf.Timestamp created_on = 7;
+    uint64 create_by = 8;
+    google.protobuf.Timestamp updated_on = 9;
+    uint64 updated_by = 10;
+}
+
+service UserService{
+    rpc CreateUser(UserServiceWriteRequest) returns (UserServiceWriteResponse);
+    rpc GetUser(UserServiceListRequest) returns (UserServiceListResponse);
+    rpc ListUsers(UserServiceListRequest) returns (UserServiceListResponse);
+    rpc UpdateUser(UserServiceWriteRequest) returns (UserServiceWriteResponse);
+    rpc DeleteUser(UserServiceWriteRequest) returns (UserServiceWriteResponse);
+    rpc UpdateStatus(UserServiceWriteRequest) returns (UserServiceWriteResponse);
+}
+

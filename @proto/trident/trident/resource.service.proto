@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+package trident;
+
+import "google/protobuf/timestamp.proto";
+import "internals/common.proto";
+import "trident/service.service.proto";
+
+enum ResourceType{
+    RESOURCE_TYPE_UNKNOWN = 0;
+    RESOURCE_TYPE_SERVICE = 1;
+    RESOURCE_TYPE_FUNCTION = 2;
+    RESOURCE_TYPE_COMPONENT = 4;
+    RESOURCE_TYPE_ACCESS = 8;
+    RESOURCE_TYPE_IMAGE = 16;
+    RESOURCE_TYPE_VIDEO = 32;
+    RESOURCE_TYPE_AUDIO = 64;
+    RESOURCE_TYPE_DOCUMENT = 128;
+    RESOURCE_TYPE_ARCHIVE = 256;
+    RESOURCE_TYPE_EVENT = 512;
+    RESOURCE_TYPE_PUBSUB = 1024;
+    RESOURCE_TYPE_STREAM = 2048;
+    RESOURCE_TYPE_STORAGE = 4096;
+    RESOURCE_TYPE_NETWORK = 8192;
+    RESOURCE_TYPE_COMPUTE = 16384;
+    RESOURCE_TYPE_IDENTITY = 32768;
+    RESOURCE_TYPE_CUSTOM = 65536;
+}
+
+enum ResourceStatus{
+    RESOURCE_STATUS_UNKNOWN = 0;
+    RESOURCE_STATUS_ACTIVE = 1;
+    RESOURCE_STATUS_INACTIVE = 2;
+    RESOURCE_STATUS_SUSPENDED = 4;
+    RESOURCE_STATUS_DELETED = 8;
+    RESOURCE_STATUS_ARCHIVED = 16;
+    RESOURCE_STATUS_EXPIRED = 32;
+    RESOURCE_STATUS_PENDING = 64;
+}
+
+message Resource{
+    string resource_id = 1;
+    string scope = 2;
+    string name = 3;
+    string fully_qualified_name = 4;
+    string description = 5;
+    ResourceType type = 6;
+    ResourceStatus status = 7;
+    google.protobuf.Timestamp created_on = 8;
+    uint64 create_by = 9;
+    google.protobuf.Timestamp updated_on = 10;
+    uint64 updated_by = 11;
+}
+
+message ServiceResource{
+    string service_resource_id = 1;
+    string scope = 2;
+    string service_id = 3;
+    string resource_id = 4;
+    optional Service service = 5;
+    optional Resource resource = 6;
+    google.protobuf.Timestamp created_on = 7;
+    uint64 create_by = 8;
+    google.protobuf.Timestamp updated_on = 9;
+    uint64 updated_by = 10;
+}
+

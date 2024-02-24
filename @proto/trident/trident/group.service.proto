@@ -1,0 +1,98 @@
+syntax = "proto3";
+
+package trident;
+
+import "google/protobuf/timestamp.proto";
+import "internals/common.proto";
+import "trident/user.service.proto";
+
+enum GroupStatus{
+    GROUP_INACTIVE = 0;
+    GROUP_ACTIVE = 1;
+    GROUP_SUSPENDED = 16;
+    GROUP_LOCKED = 32;
+}
+
+message Group {
+    string group_id = 1;
+    string group_name = 2;
+    string description = 3;
+    GroupStatus status = 4;
+    google.protobuf.Timestamp created_on = 5;
+    uint64 create_by = 6;
+    google.protobuf.Timestamp updated_on = 7;
+    uint64 updated_by = 8;
+}
+
+message GroupUser {
+    string group_user_id = 1;
+    string user_id = 2;
+    string group_id = 3;
+    repeated User users = 4;
+    optional Group group = 5;
+    google.protobuf.Timestamp created_on = 6;
+    uint64 create_by = 7;
+    google.protobuf.Timestamp updated_on = 8;
+    uint64 updated_by = 9;
+}
+
+
+message GroupServiceQuery{
+    uint32 flags = 1;
+    repeated string group_ids = 2;
+    repeated string group_names = 3;
+    repeated string user_ids = 4;
+    optional GroupStatus group_status = 5;
+    optional UserStatus user_status = 6;
+}
+
+message GroupServiceListRequest{
+    uint32 flags = 1;
+    string query = 2;
+    PageRequest page = 3;
+    GroupServiceQuery filters = 4;
+    optional TimeSpan created_on = 5;
+    optional TimeSpan updated_on = 6;
+}  
+
+message GroupServiceListResponse{
+    uint32 status = 1;
+    PageInfo page = 2;
+    repeated Group groups = 3;
+    map<string, string> errors = 4;
+}
+
+enum GroupServiceAction{
+    GROUP_SERVICE_ACTION_NONE = 0;
+    GROUP_SERVICE_ACTION_CREATE = 1;
+    GROUP_SERVICE_ACTION_UPDATE = 2;
+    GROUP_SERVICE_ACTION_DELETE = 3;
+    GROUP_SERVICE_ACTION_STATUS = 4;
+}
+
+message GroupServiceWriteRequest{
+    GroupServiceAction action = 1;
+    Group group = 2;
+}
+
+message GroupServiceWriteResponse{
+    uint32 status = 1;
+    GroupServiceAction action = 2;
+    map<string, string> errors = 3;
+    optional string group_id = 4;
+}
+
+service GroupService {
+    rpc CreateGroup(GroupServiceWriteRequest) returns (GroupServiceWriteResponse);
+    rpc UpdateGroup(GroupServiceWriteRequest) returns (GroupServiceWriteResponse);
+    rpc DeleteGroup(GroupServiceWriteRequest) returns (GroupServiceWriteResponse);
+    rpc UpdateStatus(GroupServiceWriteRequest) returns (GroupServiceWriteResponse);
+    rpc GetGroup(GroupServiceListRequest) returns (GroupServiceListResponse);
+    rpc ListGroups(GroupServiceListRequest) returns (GroupServiceListResponse);
+    rpc GroupAddUser(GroupServiceWriteRequest) returns (GroupServiceWriteResponse);
+    rpc GroupRemoveUser(GroupServiceWriteRequest) returns (GroupServiceWriteResponse);
+    rpc GroupListUsers(GroupServiceListRequest) returns (GroupServiceListResponse);
+    rpc GroupGetGroupsByUser(GroupServiceListRequest) returns (GroupServiceListResponse);
+}
+
+

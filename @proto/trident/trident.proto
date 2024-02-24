@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package trident;
+
+import "google/protobuf/timestamp.proto";
+import "internals/common.proto";
+import "trident/service.service.proto";
+import "trident/user.service.proto";
+import "trident/auth.service.proto";
+import "trident/group.service.proto";
+import "trident/resource.service.proto";
+import "trident/permission.service.proto";

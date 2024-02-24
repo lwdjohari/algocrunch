@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package trident;
+
+import "google/protobuf/timestamp.proto";
+import "internals/common.proto";
+import "trident/group.service.proto";
+import "trident/resource.service.proto";
+
+enum PermissionType{
+    PERMISSION_TYPE_NONE = 0;
+    PERMISSION_TYPE_ALLOW = 1;
+    PERMISSION_TYPE_DENIED = 2;
+}
+
+message Permission{
+    string permission_id = 1;
+    string scope = 2;
+    int32 permission = 3;
+    bool must_root = 4;
+    PermissionType type = 5;
+    LifecycleType duration = 6;
+    google.protobuf.Timestamp created_on = 7;
+    uint64 create_by = 8;
+    google.protobuf.Timestamp updated_on = 9;
+    uint64 updated_by = 10;
+}
+
+message GroupPermission{
+    string group_permission_id = 1;
+    string scope = 2;
+    string group_id = 3;
+    string permision_id = 4;
+    string resource_id = 5;
+    optional Group group = 6;
+    optional Permission permission = 7;
+    optional Resource resource = 8;
+    google.protobuf.Timestamp created_on = 9;
+    uint64 create_by = 10;
+    google.protobuf.Timestamp updated_on = 11;
+    uint64 updated_by = 12;
+}
+
+
+message ServicePermission{
+    string service_permission_id = 1;
+    string scope = 2;
+    string service_id = 3;
+    string permision_id = 4;
+    google.protobuf.Timestamp created_on = 5;
+    uint64 create_by = 6;
+    google.protobuf.Timestamp updated_on = 7;
+    uint64 updated_by = 8;
+}
+
+

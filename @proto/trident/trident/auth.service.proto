@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package trident;
+
+import "google/protobuf/timestamp.proto";
+import "internals/common.proto";
+import "trident/user.service.proto";
+
+enum AuthFlags{
+    AUTH_FLAG_NONE = 0;
+    AUTH_FLAG_USERNAME = 1;
+    AUTH_FLAG_PASS = 2;
+    AUTH_FLAG_SCOPE = 4;
+    AUTH_FLAG_PERSISTENT = 8;
+}
+
+enum AuthType{
+    AUTH_TYPE_NONE = 0;
+    AUTH_TYPE_SINGLESTEP = 1;
+    AUTH_TYPE_MULTISTEP = 2;
+    AUTH_TYPE_OAUTH = 3;
+
+}
+
+message Auth{
+    string username = 1;
+    optional string password = 2;
+    optional string scope = 3;
+    bool persistent = 4;
+    AuthType type = 5;
+    AuthFlags flags = 6;
+}
+
+message AuthSession{
+    string token = 1;
+    optional User user = 2;
+    TimeSpan session_duration = 3;
+    google.protobuf.Timestamp expired = 4;
+}
+
+message AuthResponse{
+    uint32 status = 1;
+    AuthType type = 2;
+    AuthSession session = 3;
+    map<string, string> errors = 4;
+}
+
+service AuthService{
+    rpc Authenticate(Auth) returns (AuthResponse);
+    rpc ClearSession(AuthSession) returns (AuthResponse);
+    rpc Logout(AuthSession) returns (AuthResponse);
+}
