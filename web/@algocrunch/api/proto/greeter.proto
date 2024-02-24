@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+package greeter;
+
+import "google/protobuf/timestamp.proto";
+import "internals/common.proto";
+import "greeter/echo.service.proto";
