@@ -1,0 +1,33 @@
+# docker image build for algocrunch (algocrunch-server, trident-server & darkhttpd for serving the front end)
+# author : Linggawasistha Djohari <linggawasistha.outlook@com>
+# Tretacore docker is multistage docker build.
+# Stage 1 - darkhttpd build
+# Stage 2 - algocrunch build
+# Stage 3 - final image
+
+# Darkhttpd git clone and build
+# you have to build `debian-buildtool` first before building this image
+# debian-buildtool is located on `./infras/debian-buildtool`
+# important `as darkhttpd_build` tag to use the build stage
+# docker will not include the build stage in the final image 
+
+version: '3'
+services:
+  tretacore:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    image: algocrunch:0.2.3
+    ports:
+      - "${AGC_BACKEND_SERVER_PORT}:9090"
+      - "${AGC_IDENTITY_SERVER_PORT}:9099"
+      - "${AGC_STATIC_SERVER_PORT}:80"
+      # - "${AGC_DB_PORT}:5490"
+    environment:
+      - AGC_BACKEND_SERVER_PORT=${AGC_BACKEND_SERVER_PORT:-9090}
+      - AGC_IDENTITY_SERVER_PORT=${AGC_IDENTITY_SERVER_PORT:-9089}
+      - AGC_STATIIC_SERVER_PORT=${AGC_STATIC_SERVER_PORT:-80}
+      # - AGC_DB_PORT=${AGC_DB_PORT:-5490}
+    volumes:
+      - ./agc-data/www:/var/www
+      - ./agc-data/algocrunch:/usr/local/algocrunch
