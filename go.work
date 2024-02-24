@@ -1,8 +1,10 @@
 go 1.18
 
 use (
-  ./server/trident/trident-core
-  ./server/trident/trident-server
-  ./server/algocrunch/algocrunch-core
-  ./server/algocrunch/algocrunch-server
+	./server/nvm-gocore
+    ./server/trident/trident-data
+	./server/trident/trident-core
+	./server/trident/trident-server
+	./server/algocrunch/algocrunch-core
+	./server/algocrunch/algocrunch-server
 )

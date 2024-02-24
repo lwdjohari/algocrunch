@@ -8,6 +8,7 @@
   "description": " Golang development task runner",
   "main": "gobuild-node.js",
   "scripts": {
+    
     "trident-run": "node gobuild-node.js --run ./server/trident/trident-server",
     "trident-build": "node gobuild-node.js --build --platform linux --arch amd64 --cgo --version 0.2.3 --out ./bin/trident-server ./server/trident/trident-server",
     "alc-run": "node gobuild-node.js --run ./server/algocrunch/algocrunch-server",
