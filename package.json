@@ -1,0 +1,20 @@
+{
+    "name": "@lwdjohari/go-buildnode",
+    "author":{
+      "name":"Linggawasistha Djohari",
+      "email" : "linggawasistha.djohari@outlook.com"
+    },
+    "version": "1.0.0",
+    "description": " Golang development task runner",
+    "main": "gobuild-node.js",
+    "scripts": {
+        "trident-run": "node gobuild-node.js --run ./server/trident/trident-server",
+      "trident-build": "node gobuild-node.js --build --platform linux --arch amd64 --cgo --version 0.2.3 --out bin/trident-server ./server/trident/trident-server"
+    },
+    "keywords": [],
+    "license": "ISC",
+    "dependencies": {
+      "chalk": "4",
+      "meow": "9"
+    }
+  }
