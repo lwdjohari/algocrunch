@@ -12,21 +12,22 @@ import (
 )
 
 type AuthRepo struct {
+	serviceRepo ServiceRepo
 }
 
 func NewAuthRepo() AuthRepo {
-	return AuthRepo{}
+	return AuthRepo{
+		serviceRepo: *NewService(true),
+	}
 }
 
 func (ar *AuthRepo) DoAuth(
-	username string,
-	password string,
-	scope string,
+	data dt.AuthData,
 	context nc.Option[ns.ExecutionContext],
-	result chan nc.Result[*dt.AuthData]) {
+	result chan nc.Result[*dt.AuthSessionData]) {
 
 	if context.IsNone() {
-		result <- nc.NewResult[*dt.AuthData](nil, errors.New("no excution context found"))
+		result <- nc.NewResult[*dt.AuthSessionData](nil, errors.New("no excution context found"))
 	}
 
 	ctx := context.Unwrap()
@@ -36,7 +37,7 @@ func (ar *AuthRepo) DoAuth(
 	} else {
 
 	}
-	result <- nc.NewResult[*dt.AuthData](nil, nil)
+	result <- nc.NewResult[*dt.AuthSessionData](nil, nil)
 }
 
 func (ar *AuthRepo) DoLogout(
