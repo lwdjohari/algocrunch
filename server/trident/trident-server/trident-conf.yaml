@@ -1,0 +1,20 @@
+version: '1'
+bind: '0.0.0.0'
+port: 9089
+use-ext-auth: true
+services:
+  trident:
+    service-name: 'trident'
+    base-url: 'trident'
+    scopes: ['*']
+    allow: ['trident.authService/Authenticate']
+    disallow: ['*']
+  algocrunch:
+    service-name: 'algocrunch'
+    base-url: 'algocrunch'
+    scopes: ['!trident']
+    allow: [
+      'algocrunch.registrationService/Register',
+      'algocrunch.registrationService/ForgotPassword',
+    ]
+    disallow: ['*']
