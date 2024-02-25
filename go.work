@@ -1,7 +1,8 @@
-go 1.18
+go 1.21
 
 use (
 	./server/nvm-gocore
+    ./server/nvm-sqlxe
     ./server/trident/trident-data
 	./server/trident/trident-core
 	./server/trident/trident-server

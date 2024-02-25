@@ -1,6 +1,6 @@
 module algocrunch-core
 
-go 1.18
+go 1.21
 
 require(
     nvm-gocore v0.2.3

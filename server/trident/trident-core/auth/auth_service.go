@@ -1,19 +1,21 @@
-package tridentcore
+package auth
 
 import (
-	"fmt"
 	nc "nvm-gocore"
+	ns "nvm-sqlxe"
 	tc "trident-core"
-	td "trident-data"
+	tr "trident-data/repo"
 )
 
 type AuthService struct {
 	service_type tc.TridentServiceType
+	authRepo     tr.AuthRepo
 }
 
 func NewAuthService() AuthService {
 	return AuthService{
 		service_type: tc.TridentService_AUTH,
+		authRepo:     tr.NewAuthRepo(),
 	}
 }
 
@@ -25,14 +27,15 @@ func (as *AuthService) AuthAsync(
 	username string,
 	password string,
 	scope string,
-	contex nc.Option[td.ExecutionContext],
+	contex nc.Option[ns.ExecutionContext],
 	result chan<- nc.Result[bool]) {
 	result <- nc.NewResult[bool](false, nil)
+
 }
 
 func (as *AuthService) ValidateTokenAsync(
 	token string,
-	contex nc.Option[td.ExecutionContext],
+	contex nc.Option[ns.ExecutionContext],
 	result chan<- nc.Result[bool],
 ) {
 	result <- nc.NewResult[bool](false, nil)
@@ -40,24 +43,8 @@ func (as *AuthService) ValidateTokenAsync(
 
 func (as *AuthService) Logout(
 	token string,
-	contex nc.Option[td.ExecutionContext],
+	contex nc.Option[ns.ExecutionContext],
 	result chan<- nc.Result[bool],
 ) {
 	result <- nc.NewResult[bool](false, nil)
-}
-
-func Example() {
-	authService := NewAuthService()
-
-	channel := nc.MakeChannel[nc.Result[bool]]()
-	authService.AuthAsync("", "", "", nc.None[td.ExecutionContext](), channel)
-
-	result := nc.GetFromChannel[nc.Result[bool]]()
-
-	if result.IsOk() {
-		fmt.Println(result.Value)
-	} else {
-		fmt.Println(result.Err)
-	}
-
 }
