@@ -26,18 +26,18 @@ enum IdentityProvider {
     IDENPROVIDER_YAHOO = 256;
     IDENPROVIDER_APPLE = 512;
     IDENPROVIDER_TWITCH = 1024;
-    AMAZON = 2048;
+    IDENPROVIDER_AMAZON = 2048;
 }
     
 enum UserStatus{
-    USER_INACTIVE = 0;
-    USER_ACTIVE = 1;
-    USER_INVITED = 2;
-    USER_UNCONFIRMED = 4;
-    USER_UNVERIFIED = 8;
-    USER_SUSPENDED = 16;
-    USER_LOCKED = 32;
-    USER_DELETED = 64;
+    USER_STATUS_INACTIVE = 0;
+    USER_STATUS_ACTIVE = 1;
+    USER_STATUS_INVITED = 2;
+    USER_STATUS_UNCONFIRMED = 4;
+    USER_STATUS_UNVERIFIED = 8;
+    USER_STATUS_SUSPENDED = 16;
+    USER_STATUS_LOCKED = 32;
+    USER_STATUS_DELETED = 64;
 }
 
 
@@ -46,15 +46,16 @@ message User {
     string user_id = 1;
     string username = 2;
     string email = 3;
-    string password = 4;
-    IdentityType identity_type = 5;
-    IdentityProvider identity_provider = 6;
-    uint64 flags = 7;
-    UserStatus status = 8;
-    google.protobuf.Timestamp created_on = 9;
-    uint64 create_by = 10;
-    google.protobuf.Timestamp updated_on = 11;
-    uint64 updated_by = 12;
+    string phone = 4;
+    string password = 5;
+    IdentityType identity_type = 6;
+    IdentityProvider identity_provider = 7;
+    uint64 flags = 8;
+    UserStatus status = 9;
+    google.protobuf.Timestamp created_on = 10;
+    uint64 create_by = 11;
+    google.protobuf.Timestamp updated_on = 12;
+    uint64 updated_by = 13;
 }
 
 
