@@ -21,7 +21,10 @@ type ExecutionContext struct {
 	transaction nc.Option[*sqlx.Tx]
 }
 
-func ExecutionContextFromDbContext(context nc.Option[*sqlx.DB], backend DbBackendType) *ExecutionContext {
+func ExecutionContextFromDbContext(
+	context nc.Option[*sqlx.DB],
+	backend DbBackendType,
+) *ExecutionContext {
 	ec := &ExecutionContext{
 		backend:     backend,
 		contextType: ExecutionContextType_DB_CONN,
@@ -32,7 +35,10 @@ func ExecutionContextFromDbContext(context nc.Option[*sqlx.DB], backend DbBacken
 	return ec
 }
 
-func ExecutionContextFromTransaction(context nc.Option[*sqlx.Tx], backend DbBackendType) *ExecutionContext {
+func ExecutionContextFromTransaction(
+	context nc.Option[*sqlx.Tx],
+	backend DbBackendType,
+) *ExecutionContext {
 	ec := &ExecutionContext{
 		backend:     backend,
 		contextType: ExecutionContextType_TRANSACTION,
